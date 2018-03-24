@@ -2,17 +2,17 @@
 
 CC = g++
 CFLAGS = -I$(INCLUDE_DIR)
-OUTPUT_TARGET = app
+OUTPUT_TARGET = ac
 
 INCLUDE_DIR = ../include
 OBJS_DIR = objects
 LIB_DIR = ../lib
 LIBS = -lm
 
-_DEPS = helloWorld.h
+_DEPS = Scanner.h
 DEPS = $(patsubst %, $(INCLUDE_DIR)/%, $(_DEPS))
 
-_OBJS = helloWorld.o main.o
+_OBJS = Scanner.o main.o
 OBJS = $(patsubst %, $(OBJS_DIR)/%, $(_OBJS))
 
 $(OUTPUT_TARGET): $(OBJS)
