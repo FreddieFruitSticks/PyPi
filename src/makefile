@@ -1,7 +1,7 @@
 # quick reference http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
 CC = g++
-CFLAGS = -I$(INCLUDE_DIR)
+CFLAGS = -I$(INCLUDE_DIR) -std=c++11
 OUTPUT_TARGET = ac
 
 INCLUDE_DIR = ../include
