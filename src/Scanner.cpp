@@ -5,23 +5,16 @@
 #include <string.h>
 #include <regex>
 
-struct TOKEN {
-	std::string type;
-	std::string value;
-};
-
 std::ostream& operator << (std::ostream& o, const TOKEN& a){
-	return o << a.type;
+	return o << "type: " << a.type << ", value: " << a.value;
 }
 
 TOKEN getToken(std::vector<char> tokenBuffer){
 	TOKEN token;
-	// std::cout << tokenBuffer.size() << std::endl;
 	std::string terminal = "";
 	for(int i = 0; i < tokenBuffer.size(); i++){
 		terminal += tokenBuffer[i];
 	}
-	// std::cout << terminal << std::endl;
 	if (terminal == "float"){
 		token.type = "floatDcl";
 	}else if (terminal == "int"){
@@ -54,12 +47,11 @@ void printVector(std::vector<TOKEN> tokens){
 	}
 }
 
-void scan(std::string source) {
+TOKEN* scan(std::string source) {
 	std::ifstream sourceIn(source.c_str());
 	std::vector<TOKEN> tokens;
 	std::vector<char> tokenBuffer;
 	while(char nextChar = sourceIn.get()){
-		std::cout << nextChar << std::endl;
 		if(sourceIn.eof()){
 			tokens.push_back(getToken(tokenBuffer));
 			tokenBuffer.clear();
@@ -72,7 +64,10 @@ void scan(std::string source) {
 		}
 		tokenBuffer.push_back(nextChar);
 	}
+	TOKEN endToken;
+	endToken.type = "$";
+	tokens.push_back(endToken);
 	printVector(tokens);
-	return;
+	return &tokens.front();
 }
 

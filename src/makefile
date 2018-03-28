@@ -9,10 +9,10 @@ OBJS_DIR = objects
 LIB_DIR = ../lib
 LIBS = -lm
 
-_DEPS = Scanner.h
+_DEPS = Scanner.h Parser.h
 DEPS = $(patsubst %, $(INCLUDE_DIR)/%, $(_DEPS))
 
-_OBJS = Scanner.o main.o
+_OBJS = Scanner.o Parser.o main.o
 OBJS = $(patsubst %, $(OBJS_DIR)/%, $(_OBJS))
 
 $(OUTPUT_TARGET): $(OBJS)
