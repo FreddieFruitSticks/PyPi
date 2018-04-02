@@ -2,7 +2,6 @@
 #include <Scanner.h>
 
 bool parseProgram(TOKEN* tokenPtr){
-	std::cout << "!!!!!!!!!!!!!!!!" << *(tokenPtr) << std::endl;
 
 	if (parseDeclarations(tokenPtr)){
 		return true;
@@ -35,7 +34,6 @@ bool testDeclarationAndAdvance(TOKEN* tokenPtr){
 	}else {
 		return false;
 	}
-	std::cout << "!!!!!!!!!!!!!!!!" << *(tokenPtr) << std::endl;
 
 	return true;
 }

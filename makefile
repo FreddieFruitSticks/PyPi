@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
-OUTPUT_TARGET = ac
+OUTPUT_TARGET = compile
 
 THIRD_PARTY_INCLUDE_DIR = ./cget/include
 _THIRD_PARTY_INCLUDE = catch
