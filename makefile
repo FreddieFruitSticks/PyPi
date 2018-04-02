@@ -3,7 +3,7 @@ CFLAGS = -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
 OUTPUT_TARGET = ac
 
 THIRD_PARTY_INCLUDE_DIR = ./cget/include
-_THIRD_PARTY_INCLUDE = cppunit
+_THIRD_PARTY_INCLUDE = catch
 THIRD_PARTY_INCLUDE = $(patsubst %, $(THIRD_PARTY_INCLUDE_DIR)/%, $(_THIRD_PARTY_INCLUDE))
 THIRD_PARTY_LIB = ./cget/lib
 
@@ -38,7 +38,7 @@ _TEST_OUTPUT_TARGET = test
 TEST_CFLAGS = -I$(_TEST_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
 
 
-_TEST_OBJS = main.o TestScanner.o
+_TEST_OBJS = TestScanner.o
 TEST_OBJS = $(patsubst %, $(_TEST_BUILD_DIR)/%, $(_TEST_OBJS))
 
 _TEST_H = TestScanner.h
@@ -48,7 +48,7 @@ clean-tests:
 	rm -f tests/build/*.o test *~ core $(INCLUDE_DIR)/*~
 
 tests: $(TEST_OBJS)
-	$(CC) -o $(_TEST_OUTPUT_TARGET) $^ -L$(THIRD_PARTY_LIB) -lcppunit
+	$(CC) -o $(_TEST_OUTPUT_TARGET) $^ -L$(THIRD_PARTY_LIB)
 
-$(_TEST_BUILD_DIR)/%.o: $(_TEST_DIR)/%.cpp $(TEST_H)
+$(_TEST_BUILD_DIR)/%.o: $(_TEST_DIR)/%.cpp
 	$(CC) -c -o $@ $< $(TEST_CFLAGS)
