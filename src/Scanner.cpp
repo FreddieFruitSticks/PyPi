@@ -41,7 +41,6 @@ TOKEN getToken(std::vector<char> tokenBuffer){
 	for(int i = 0; i < tokenBuffer.size(); i++){
 		terminal += tokenBuffer[i];
 	}
-		std::cout << "getOperator"<< terminal << std::endl;
 
 	token = getReservedKeyword(terminal);
 	if (token.type != ""){
@@ -72,18 +71,25 @@ void printVector(std::vector<TOKEN> tokens){
 	}
 }
 
+#define NEWLINE 32
+#define SPACE 10
+
 TOKEN* scan(std::string source) {
 	std::ifstream sourceIn(source.c_str());
 	std::vector<TOKEN> tokens;
 	std::vector<char> tokenBuffer;
 	while(char nextChar = sourceIn.get()){
 		if(sourceIn.eof()){
-			tokens.push_back(getToken(tokenBuffer));
+			if(tokenBuffer.size() > 0){
+				tokens.push_back(getToken(tokenBuffer));
+			}
 			tokenBuffer.clear();
 			break;
 		}
-		if((int)nextChar == 10 || (int)nextChar == 32 || nextChar == '\n'){
-			tokens.push_back(getToken(tokenBuffer));
+		if((int)nextChar == NEWLINE || (int)nextChar == SPACE || nextChar == '\n'){
+			if(tokenBuffer.size() > 0){
+				tokens.push_back(getToken(tokenBuffer));
+			}
 			tokenBuffer.clear();
 			continue;
 		}
@@ -91,9 +97,9 @@ TOKEN* scan(std::string source) {
 		char peeked = sourceIn.peek();
 		std::string peekedString = "";
 		peekedString += peeked;
-		TOKEN op = getOperator(peekedString)
-		
-		if(op.type != ""){
+		TOKEN opPeek = getOperator(peekedString);
+
+		if(opPeek.type != ""){
 			tokenBuffer.push_back(nextChar);
 			tokens.push_back(getToken(tokenBuffer));
 			tokenBuffer.clear();

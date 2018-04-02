@@ -1,8 +1,9 @@
+#ifndef _SCANNER_H
+#define _SCANNER_H
+
 #include <string>
 #include <iostream>
 
-#ifndef _SCANNER_H
-#define _SCANNER_H
 struct TOKEN {
 	std::string type;
 	std::string value;

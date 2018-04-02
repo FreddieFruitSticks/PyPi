@@ -35,7 +35,7 @@ $(OBJS_DIR)/%.o: src/%.cpp $(DEPS)
 _TEST_BUILD_DIR = tests/build
 _TEST_DIR = tests
 _TEST_OUTPUT_TARGET = test
-TEST_CFLAGS = -I$(_TEST_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
+TEST_CFLAGS = -I$(_TEST_DIR) -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
 
 
 _TEST_OBJS = TestScanner.o
@@ -50,5 +50,5 @@ clean-tests:
 tests: $(TEST_OBJS)
 	$(CC) -o $(_TEST_OUTPUT_TARGET) $^ -L$(THIRD_PARTY_LIB)
 
-$(_TEST_BUILD_DIR)/%.o: $(_TEST_DIR)/%.cpp
+$(_TEST_BUILD_DIR)/%.o: $(_TEST_DIR)/%.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(TEST_CFLAGS)
