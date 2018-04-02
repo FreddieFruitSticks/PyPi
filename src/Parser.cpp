@@ -11,7 +11,7 @@ bool parseProgram(TOKEN* tokenPtr){
 }
 
 bool parseDeclarations(TOKEN* tokenPtr){
-	if (parseDeclaration(tokenPtr)){
+	while (parseDeclaration(tokenPtr)){
 		return true;
 	}
 	return false;
@@ -24,7 +24,6 @@ bool parseDeclaration(TOKEN* tokenPtr){
 }
 
 bool testDeclarationAndAdvance(TOKEN* tokenPtr){
-	TOKEN token;
 	if ((*tokenPtr).type == "floatDcl" || (*tokenPtr).type == "intDcl"){
 		tokenPtr++;
 	}else {

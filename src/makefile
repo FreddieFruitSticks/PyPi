@@ -1,13 +1,18 @@
 # quick reference http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
 CC = g++
-CFLAGS = -I$(INCLUDE_DIR) -std=c++11
+CFLAGS = -I$(INCLUDE_DIR) $(THIRD_PARTY_INCLUDE) -L$(THIRD_PARTY_LIB) -std=c++11
 OUTPUT_TARGET = ac
 
 INCLUDE_DIR = ../include
 OBJS_DIR = objects
 LIB_DIR = ../lib
 LIBS = -lm
+
+THIRD_PARTY_INCLUDE_DIR = ../cget/include
+_THIRD_PARTY_INCLUDE = cppunit
+THIRD_PARTY_INCLUDE = $(patsubst %, -I$(THIRD_PARTY_INCLUDE_DIR)/%, $(_THIRD_PARTY_INCLUDE))
+THIRD_PARTY_LIB = ../cget/lib
 
 _DEPS = Scanner.h Parser.h
 DEPS = $(patsubst %, $(INCLUDE_DIR)/%, $(_DEPS))

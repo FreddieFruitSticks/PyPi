@@ -52,6 +52,7 @@ TOKEN* scan(std::string source) {
 	std::vector<TOKEN> tokens;
 	std::vector<char> tokenBuffer;
 	while(char nextChar = sourceIn.get()){
+		std::cout << nextChar << " " << (int)nextChar << std::endl;
 		if(sourceIn.eof()){
 			tokens.push_back(getToken(tokenBuffer));
 			tokenBuffer.clear();
