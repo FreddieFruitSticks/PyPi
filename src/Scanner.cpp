@@ -35,6 +35,15 @@ TOKEN getOperator(std::string terminal){
 	return token;
 }
 
+bool checkOperator(char op){
+	switch(op){
+		case '=': return true; break;
+		case '+': return true; break;
+		case '-': return true; break;
+		default: return false; break;
+	}
+}
+
 TOKEN getToken(std::vector<char> tokenBuffer){
 	TOKEN token;
 	std::string terminal = "";
@@ -79,14 +88,14 @@ TOKEN* scan(std::string source) {
 	std::vector<TOKEN> tokens;
 	std::vector<char> tokenBuffer;
 	while(char nextChar = sourceIn.get()){
-		if(sourceIn.eof()){
+		if(sourceIn.eof() || (int)nextChar == -1){
 			if(tokenBuffer.size() > 0){
 				tokens.push_back(getToken(tokenBuffer));
 			}
 			tokenBuffer.clear();
 			break;
 		}
-		if((int)nextChar == NEWLINE || (int)nextChar == SPACE || nextChar == '\n'){
+		if((int)nextChar == NEWLINE || (int)nextChar == SPACE){
 			if(tokenBuffer.size() > 0){
 				tokens.push_back(getToken(tokenBuffer));
 			}
@@ -94,26 +103,15 @@ TOKEN* scan(std::string source) {
 			continue;
 		}
 
-		char peeked = sourceIn.peek();
-		std::string peekedString = "";
-		peekedString += peeked;
-		TOKEN opPeek = getOperator(peekedString);
-
-		if(opPeek.type != ""){
+		if(checkOperator(nextChar)){
+			if(tokenBuffer.size() > 0){
+				tokens.push_back(getToken(tokenBuffer));
+			}
+			tokenBuffer.clear();
 			tokenBuffer.push_back(nextChar);
 			tokens.push_back(getToken(tokenBuffer));
 			tokenBuffer.clear();
-			continue;
-		}
-
-		std::string nextCharString = "";
-		nextCharString += nextChar;
-		TOKEN op = getOperator(nextCharString);
-
-		if(op.type != ""){
-			tokens.push_back(op);
-			tokenBuffer.clear();
-			continue;
+			continue;						
 		}
 		tokenBuffer.push_back(nextChar);
 	}
