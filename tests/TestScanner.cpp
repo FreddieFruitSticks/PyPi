@@ -1,10 +1,32 @@
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
-#include <catch/catch.hpp>
-#include "Scanner.h"
+#include <Scanner.h>
+#include <string>
+#include <Testpp.h>
 
-TOKEN* token = scan(std::string("sourceTest"));
+bool checkTokenSequenceOf1(TOKEN* tokenPtr){
+    if(tokenPtr->type != FLOAT_DCL) return false;
+    tokenPtr++;
+    if(tokenPtr->type != ID) return false;
+    tokenPtr++;
+    if(tokenPtr->type != INT_DCL) return false;
+    tokenPtr++;
+    if(tokenPtr->type != ID) return false;
+    tokenPtr++;
+    if(tokenPtr->type != ID) return false;
+    tokenPtr++;
+    if(tokenPtr->type != PLUS) return false;
+    tokenPtr++;
+    if(tokenPtr->type != ID) return false;
+    tokenPtr++;
+    if(tokenPtr->type != END_OF_FILE) return false;    
+    return true;
+}
 
-TEST_CASE( "Factorials are computed", "[factorial]" ) {
+void test_scanner(){
+    TOKEN* tokenPtr;
+	tokenPtr = scan(std::string("./tests/test_sources/sourceTest1"));
+	VERIFY("Verify correct Token Sequence of sourceTest1", checkTokenSequenceOf1(tokenPtr));
+}
 
-    REQUIRE((*token).type == "floatDcl");
+void scanner_suite(){
+    TEST_SUITE("SCANNER SUITE", &test_scanner);
 }

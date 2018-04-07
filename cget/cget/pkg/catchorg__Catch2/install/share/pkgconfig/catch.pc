@@ -1,6 +1,0 @@
-includedir=/home/freddie/workspace/compiler/cget/cget/pkg/catchorg__Catch2/install/include
-
-Name: Catch
-Description: Testing library for C++
-Version: 2.2.1
-Cflags: -I${includedir}

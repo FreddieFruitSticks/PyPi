@@ -23,13 +23,13 @@ bool parseDeclaration(TOKEN* tokenPtr){
 }
 
 bool testDeclarationAndAdvance(TOKEN* tokenPtr){
-	if ((*tokenPtr).type == FLOAT_DCL || (*tokenPtr).type == INT_DCL){
+	if (tokenPtr->type == FLOAT_DCL || tokenPtr->type == INT_DCL){
 		tokenPtr++;
 	}else {
 		return false;
 	}
 
-	if ((*tokenPtr).type == ID){
+	if (tokenPtr->type == ID){
 		tokenPtr++;
 	}else {
 		return false;

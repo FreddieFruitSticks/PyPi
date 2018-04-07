@@ -114,7 +114,7 @@ TOKEN* scan(std::string source) {
 	TOKEN endToken;
 	endToken.type = END_OF_FILE;
 	tokens.push_back(endToken);
-	printVector(tokens);
+	// printVector(tokens);
 	return &tokens.front();
 }
 

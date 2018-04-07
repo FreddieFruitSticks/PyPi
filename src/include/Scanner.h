@@ -1,5 +1,5 @@
-#ifndef _SCANNER_H
-#define _SCANNER_H
+#ifndef SCANNER_H
+#define SCANNER_H
 
 #include <string>
 #include <iostream>
@@ -25,4 +25,5 @@ struct TOKEN {
 
 TOKEN* scan(std::string);
 std::ostream& operator << (std::ostream& o, const TOKEN& a);
+std::ostream& operator << (std::ostream& out, const TokenType& value);
 #endif /*_SCANNER_H*/
