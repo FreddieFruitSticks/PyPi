@@ -25,8 +25,10 @@ void test_scanner(){
     TOKEN* tokenPtr;
 	tokenPtr = scan(std::string("./tests/test_sources/sourceTest1"));
 	VERIFY("Verify correct Token Sequence of sourceTest1", checkTokenSequenceOf1(tokenPtr));
+	VERIFY("Verify correct Token Sequence of sourceTest1", false);
 }
 
+// register suite
 void scanner_suite(){
     TEST_SUITE("SCANNER SUITE", &test_scanner);
 }
