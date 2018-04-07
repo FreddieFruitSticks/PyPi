@@ -5,19 +5,15 @@
 #include <string.h>
 #include <regex>
 
-std::ostream& operator << (std::ostream& o, const TOKEN& a){
-	return o << "type: " << a.type << ", value: " << a.value;
-}
-
 TOKEN getReservedKeyword(std::string terminal){
 	TOKEN token;
 
 	if (terminal == "float"){
-		token.type = "floatDcl";
+		token.type = FLOAT_DCL;
 	}else if(terminal == "int"){
-		token.type = "intDcl";
+		token.type = INT_DCL;
 	}else if(terminal == "print"){
-		token.type = "print";
+		token.type = PRINT;
 	}
 	return token;
 }
@@ -26,11 +22,11 @@ TOKEN getOperator(std::string terminal){
 	TOKEN token;
 
 	if (terminal == "="){
-		token.type = "assign";
+		token.type = ASSIGN;
 	}else if (terminal == "+"){
-		token.type = "plus";
+		token.type = PLUS;
 	}else if (terminal == "-"){
-		token.type = "minus";
+		token.type = MINUS;
 	}
 	return token;
 }
@@ -52,22 +48,22 @@ TOKEN getToken(std::vector<char> tokenBuffer){
 	}
 
 	token = getReservedKeyword(terminal);
-	if (token.type != ""){
+	if (token.type != NIL){
 		return token;
 	}
 	token = getOperator(terminal);
-	if(token.type != ""){
+	if(token.type != NIL){
 		return token;
 	}
 
 	if (std::regex_match(terminal, std::regex("_?[_0-9a-zA-Z]+"))){
-		token.type = "id";
+		token.type = ID;
 		token.value = terminal;
 	}else if (std::regex_match(terminal, std::regex("[1-9][0-9]*"))){
-		token.type = "intNum";
+		token.type = INT_NUM;
 		token.value = terminal;
 	}else if(std::regex_match(terminal, std::regex("[0-9]+[.][0-9]+"))){
-		token.type = "floatNum";
+		token.type = FLOAT_NUM;
 		token.value = terminal;
 	}
 	return token;
@@ -80,8 +76,8 @@ void printVector(std::vector<TOKEN> tokens){
 	}
 }
 
-#define NEWLINE 32
-#define SPACE 10
+#define NEWLINE_CONST 32
+#define SPACE_CONST 10
 
 TOKEN* scan(std::string source) {
 	std::ifstream sourceIn(source.c_str());
@@ -95,7 +91,7 @@ TOKEN* scan(std::string source) {
 			tokenBuffer.clear();
 			break;
 		}
-		if((int)nextChar == NEWLINE || (int)nextChar == SPACE){
+		if(nextChar == NEWLINE_CONST || nextChar == SPACE_CONST){
 			if(tokenBuffer.size() > 0){
 				tokens.push_back(getToken(tokenBuffer));
 			}
@@ -116,9 +112,31 @@ TOKEN* scan(std::string source) {
 		tokenBuffer.push_back(nextChar);
 	}
 	TOKEN endToken;
-	endToken.type = "$";
+	endToken.type = END_OF_FILE;
 	tokens.push_back(endToken);
 	printVector(tokens);
 	return &tokens.front();
 }
 
+std::ostream& operator << (std::ostream& out, const TokenType& value){
+	static std::map<const TokenType, std::string> tokens;
+	#define INSERT_TOKEN_NAME(p) tokens[p] = #p
+		INSERT_TOKEN_NAME(NIL);
+        INSERT_TOKEN_NAME(END_OF_FILE);
+        INSERT_TOKEN_NAME(FLOAT_DCL);
+        INSERT_TOKEN_NAME(INT_DCL);
+        INSERT_TOKEN_NAME(PRINT);
+        INSERT_TOKEN_NAME(ASSIGN);
+        INSERT_TOKEN_NAME(PLUS);
+        INSERT_TOKEN_NAME(MINUS);
+        INSERT_TOKEN_NAME(ID);
+        INSERT_TOKEN_NAME(INT_NUM);
+        INSERT_TOKEN_NAME(FLOAT_NUM);
+	#undef INSERT_TOKEN_NAME
+
+	return out << tokens[value];
+}
+
+std::ostream& operator << (std::ostream& out, const TOKEN& value){
+	return out << "type: " << value.type << ", value: " << value.value;
+}
