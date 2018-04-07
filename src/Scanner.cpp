@@ -56,11 +56,11 @@ TOKEN getToken(std::vector<char> tokenBuffer){
 		return token;
 	}
 
-	if (std::regex_match(terminal, std::regex("_?[_0-9a-zA-Z]+"))){
-		token.type = ID;
-		token.value = terminal;
-	}else if (std::regex_match(terminal, std::regex("[1-9][0-9]*"))){
+	if (std::regex_match(terminal, std::regex("[1-9][0-9]*"))){
 		token.type = INT_NUM;
+		token.value = terminal;
+	}else if (std::regex_match(terminal, std::regex("_?[_0-9a-zA-Z]+"))){
+		token.type = ID;
 		token.value = terminal;
 	}else if(std::regex_match(terminal, std::regex("[0-9]+[.][0-9]+"))){
 		token.type = FLOAT_NUM;
@@ -117,6 +117,8 @@ TOKEN* scan(std::string source) {
 	// printVector(tokens);
 	return &tokens.front();
 }
+#undef NEWLINE_CONST
+#undef SPACE_CONST
 
 std::ostream& operator << (std::ostream& out, const TokenType& value){
 	static std::map<const TokenType, std::string> tokens;
