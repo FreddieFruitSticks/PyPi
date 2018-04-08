@@ -118,8 +118,7 @@ TOKEN* scan(std::string source) {
 	tokens.push_back(endToken);
 	TOKEN* firstToken = &tokens.front();
 	TOKEN* firstTokenCopy = firstToken;
-	printVector(firstTokenCopy);
-    std::cout << "!!!!!!!!!!!!!" << *firstToken << std::endl;
+	// printVector(firstTokenCopy);
 	
 	return firstTokenCopy;
 }
