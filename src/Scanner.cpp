@@ -69,11 +69,13 @@ TOKEN getToken(std::vector<char> tokenBuffer){
 	return token;
 };
 
-void printVector(std::vector<TOKEN> tokens){
-	std::vector<TOKEN>::iterator tokensIterator;
-	for(tokensIterator = tokens.begin(); tokensIterator != tokens.end(); tokensIterator++){
+void printVector(TOKEN* tokens){
+	TOKEN* tokenPtr = tokens;
+	TOKEN* tokensIterator;
+	for(tokensIterator = tokenPtr; tokensIterator->type != END_OF_FILE; tokensIterator++){
 		std::cout << *tokensIterator << std::endl;
 	}
+	std::cout << *tokensIterator << std::endl;	
 }
 
 #define NEWLINE_CONST 32
@@ -107,15 +109,19 @@ TOKEN* scan(std::string source) {
 			tokenBuffer.push_back(nextChar);
 			tokens.push_back(getToken(tokenBuffer));
 			tokenBuffer.clear();
-			continue;						
+			continue;				
 		}
 		tokenBuffer.push_back(nextChar);
 	}
 	TOKEN endToken;
 	endToken.type = END_OF_FILE;
 	tokens.push_back(endToken);
-	// printVector(tokens);
-	return &tokens.front();
+	TOKEN* firstToken = &tokens.front();
+	TOKEN* firstTokenCopy = firstToken;
+	printVector(firstTokenCopy);
+    std::cout << "!!!!!!!!!!!!!" << *firstToken << std::endl;
+	
+	return firstTokenCopy;
 }
 #undef NEWLINE_CONST
 #undef SPACE_CONST

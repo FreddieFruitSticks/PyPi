@@ -36,13 +36,18 @@ bool checkTokenSequenceOf2(){
     TOKEN* tokenPtr;
 	tokenPtr = scan(std::string("./tests/test_sources/sourceTest2"));
 
-    if(tokenPtr->type != ID) return false;
+    if(tokenPtr->type != FLOAT_DCL) return false;
+    // std::cout << "()()()()(" << *tokenPtr << std::endl;
     tokenPtr++;
+    if(tokenPtr->type != ID) return false;
+    // std::cout << "()()()()(" << *tokenPtr << std::endl;
+    tokenPtr++;
+    // std::cout << "!!!!!!!!!!!!!" << *tokenPtr << std::endl;
     if(tokenPtr->type != PLUS) return false;
     tokenPtr++;
     if(tokenPtr->type != ID) return false;
     tokenPtr++;
-    if(tokenPtr->type != END_OF_FILE) return false;    
+    if(tokenPtr->type != END_OF_FILE) return false;
     return true;
 }
 
