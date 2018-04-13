@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 typedef enum Tokens {
 	NIL,
@@ -24,7 +25,7 @@ struct TOKEN {
 	std::string value;
 };
 
-TOKEN* scan(std::string);
+std::vector<TOKEN> scan(std::string);
 std::ostream& operator << (std::ostream& o, const TOKEN& a);
 std::ostream& operator << (std::ostream& out, const TokenType& value);
 #endif /*_SCANNER_H*/

@@ -1,5 +1,5 @@
-CC = g++
-CFLAGS = -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
+CC = gcc
+CFLAGS = -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=c++11
 OUTPUT_TARGET = compile
 
 THIRD_PARTY_INCLUDE_DIR = ./cget/include
@@ -38,19 +38,19 @@ _TEST_BUILD_DIR = tests/build
 _TEST_DIR = tests
 _TEST_INCLUDE_DIR = tests/include
 _TEST_OUTPUT_TARGET = test
-TEST_CFLAGS = -I$(_TEST_INCLUDE_DIR) -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=gnu++11
+TEST_CFLAGS = -I$(_TEST_INCLUDE_DIR) -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=c++11
 
-_TEST_OBJS = TestScanner.o Testpp.o main.o
+_TEST_OBJS = TestScanner.o TestParser.o Testpp.o main.o
 TEST_OBJS = $(patsubst %, $(_TEST_BUILD_DIR)/%, $(_TEST_OBJS))
 
-_TEST_H = TestScanner.h Testpp.h
+_TEST_H = TestScanner.h TestParser.h Testpp.h
 TEST_DEPS = $(patsubst %, $(_TEST_INCLUDE_DIR)/%, $(_TEST_H))
 
 clean-tests: 
 	rm -f tests/build/*.o test *~ core $(INCLUDE_DIR)/*~
 
 $(_TEST_OUTPUT_TARGET): $(TEST_OBJS) $(OBJS)
-	$(CC) -o $@ $^ -L$(THIRD_PARTY_LIB)
+	$(CC) -o $@ $^ -L$(THIRD_PARTY_LIB) $(LIBS)
 
 $(_TEST_BUILD_DIR)/%.o: $(_TEST_DIR)/%.cpp $(DEPS) $(TEST_DEPS)
-	$(CC) -c -o $@ $< $(TEST_CFLAGS)
+	$(CC) -c -o $@ $< $(TEST_CFLAGS) 

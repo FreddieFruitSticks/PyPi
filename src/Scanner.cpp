@@ -81,7 +81,7 @@ void printVector(TOKEN* tokens){
 #define NEWLINE_CONST 32
 #define SPACE_CONST 10
 
-TOKEN* scan(std::string source) {
+std::vector<TOKEN> scan(std::string source) {
 	std::ifstream sourceIn(source.c_str());
 	std::vector<TOKEN> tokens;
 	std::vector<char> tokenBuffer;
@@ -101,6 +101,7 @@ TOKEN* scan(std::string source) {
 			continue;
 		}
 
+		// Checking to see if we need to ignore white spaces. eg a ( can have many white spaces before and after it
 		if(checkOperator(nextChar)){
 			if(tokenBuffer.size() > 0){
 				tokens.push_back(getToken(tokenBuffer));
@@ -116,11 +117,11 @@ TOKEN* scan(std::string source) {
 	TOKEN endToken;
 	endToken.type = END_OF_FILE;
 	tokens.push_back(endToken);
-	TOKEN* firstToken = &tokens.front();
-	TOKEN* firstTokenCopy = firstToken;
-	// printVector(firstTokenCopy);
+	TOKEN* tokenPtr = &tokens[0];
+	// printVector(firstToken);
+	// std::cout << firstToken->type << std::endl;
 	
-	return firstTokenCopy;
+	return tokens;
 }
 #undef NEWLINE_CONST
 #undef SPACE_CONST
