@@ -2,35 +2,37 @@
 #include <Scanner.h>
 #include <string>
 #include <Testpp.h>
+#include <TestScanner.h>
 
 bool checkParser1(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest1"));
-    TOKEN* front = &tokens[0];
-    return parseProgram(front);
+	TokenStream* tokenStream = new TokenStream(tokens);
+    return parseProgram(tokenStream);
+    delete [] tokenStream;
 }
 
 bool checkParser2(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest2"));
-    TOKEN* front = &tokens[0];
-    return parseProgram(front);
+	TokenStream tokenStream(tokens);
+    return parseProgram(&tokenStream);
 }
 
 bool checkParser3(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest3"));
-    TOKEN* front = &tokens[0];
-    return parseProgram(front);
+	TokenStream tokenStream(tokens);
+    return parseProgram(&tokenStream);
 }
 
 bool checkParser4(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest4"));
-    TOKEN* front = &tokens[0];
-    return parseProgram(front);
+	TokenStream tokenStream(tokens);
+    return parseProgram(&tokenStream);
 }
 
 bool checkParser5(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest5"));
-    TOKEN* front = &tokens[0];
-    return parseProgram(front);
+	TokenStream tokenStream(tokens);
+    return parseProgram(&tokenStream);
 }
 
 void test_parser(){

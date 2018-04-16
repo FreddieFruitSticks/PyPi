@@ -11,10 +11,10 @@ INCLUDE_DIR = ./src/include
 OBJS_DIR = src/build
 LIBS = -lm -lstdc++
 
-_DEPS = Scanner.h Parser.h
+_DEPS = Scanner.h Parser.h TokenStream.h
 DEPS = $(patsubst %, $(INCLUDE_DIR)/%, $(_DEPS))
 
-_OBJS = Scanner.o Parser.o
+_OBJS = Scanner.o Parser.o TokenStream.o
 OBJS = $(patsubst %, $(OBJS_DIR)/%, $(_OBJS))
 
 _MAIN = main.o

@@ -118,7 +118,7 @@ std::vector<TOKEN> scan(std::string source) {
 	endToken.type = END_OF_FILE;
 	tokens.push_back(endToken);
 	TOKEN* tokenPtr = &tokens[0];
-	// printVector(firstToken);
+	// printVector( tokenPtr );
 	// std::cout << firstToken->type << std::endl;
 	
 	return tokens;

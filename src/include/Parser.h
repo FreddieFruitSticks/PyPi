@@ -2,9 +2,10 @@
 #define _PARSER_H
 
 #include <Scanner.h>
+#include <TokenStream.h>
 
-bool parseProgram(TOKEN*);
-bool parseDeclarations(TOKEN*);
-bool parseDeclaration(TOKEN*);
-bool testDeclarationAndAdvance(TOKEN*);
+bool parseProgram(TokenStream*);
+bool parseDeclarations(TokenStream*);
+bool parseType(TokenStream*);
+bool parseId(TokenStream*);
 #endif /*_PARSER_H*/
