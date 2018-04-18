@@ -13,26 +13,26 @@ bool checkParser1(){
 
 bool checkParser2(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest2"));
-	TokenStream tokenStream(tokens);
-    return parseProgram(&tokenStream);
+	TokenStream* tokenStream = new TokenStream(tokens);
+    return parseProgram(tokenStream);
 }
 
 bool checkParser3(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest3"));
-	TokenStream tokenStream(tokens);
-    return parseProgram(&tokenStream);
+	TokenStream* tokenStream = new TokenStream(tokens);
+    return parseProgram(tokenStream);
 }
 
 bool checkParser4(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest4"));
-	TokenStream tokenStream(tokens);
-    return parseProgram(&tokenStream);
+	TokenStream* tokenStream = new TokenStream(tokens);
+    return parseProgram(tokenStream);
 }
 
 bool checkParser5(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest5"));
-	TokenStream tokenStream(tokens);
-    return parseProgram(&tokenStream);
+	TokenStream* tokenStream = new TokenStream(tokens);
+    return parseProgram(tokenStream);
 }
 
 void test_parser(){

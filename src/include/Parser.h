@@ -5,7 +5,7 @@
 #include <TokenStream.h>
 
 bool parseProgram(TokenStream*);
-bool parseDeclarations(TokenStream*);
+bool parseDeclaration(TokenStream*);
 bool parseType(TokenStream*);
 bool parseId(TokenStream*);
 #endif /*_PARSER_H*/

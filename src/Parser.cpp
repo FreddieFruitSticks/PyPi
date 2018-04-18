@@ -4,15 +4,18 @@
 
 bool parseProgram(TokenStream* tokenStream){
 
-	if(parseDeclarations(tokenStream)){
+	if(parseDeclaration(tokenStream)){
 		return true;
 	}
 	return false;
 }
 
-bool parseDeclarations(TokenStream* tokenStream){
+bool parseDeclaration(TokenStream* tokenStream){
 	if(!parseType(tokenStream)) return false;
 	if(!parseId(tokenStream)) return false;
+	if(tokenStream->peekCurrent().type == FLOAT_DCL ||  tokenStream->peekCurrent().type == INT_DCL){
+		parseDeclaration(tokenStream);
+	}
 	return true;
 }
 
