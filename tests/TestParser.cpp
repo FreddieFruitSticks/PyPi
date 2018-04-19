@@ -8,7 +8,6 @@ bool checkParser1(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest1"));
 	TokenStream* tokenStream = new TokenStream(tokens);
     return parseProgram(tokenStream);
-    delete [] tokenStream;
 }
 
 bool checkParser2(){

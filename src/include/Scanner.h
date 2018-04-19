@@ -16,8 +16,7 @@ typedef enum Tokens {
 	MINUS,
 	ID,
 	INT_NUM,
-	FLOAT_NUM,
-	EQUALS
+	FLOAT_NUM
 } TokenType;
 
 struct TOKEN {
