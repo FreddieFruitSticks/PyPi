@@ -38,16 +38,17 @@ bool checkTokenSequenceOf2(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/scanner/sourceTest2"));
     tokenPtr = &tokens[0];
 
-    // if(tokenPtr->type != FLOAT_DCL) return false;
-    // // std::cout << "()()()()(" << *tokenPtr << std::endl;
-    // tokenPtr++;
     if(tokenPtr->type != ID) return false;
-    // std::cout << "()()()()(" << *tokenPtr << std::endl;
     tokenPtr++;
-    // std::cout << "!!!!!!!!!!!!!" << *tokenPtr << std::endl;
     if(tokenPtr->type != PLUS) return false;
     tokenPtr++;
     if(tokenPtr->type != ID) return false;
+    tokenPtr++;
+    if(tokenPtr->type != INT_NUM) return false;
+    tokenPtr++;
+    if(tokenPtr->type != PLUS) return false;
+    tokenPtr++;
+    if(tokenPtr->type != INT_NUM) return false;
     tokenPtr++;
     if(tokenPtr->type != END_OF_FILE) return false;
     return true;

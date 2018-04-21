@@ -13,10 +13,13 @@ bool parseProgram(TokenStream* tokenStream){
 }
 
 bool atLeastOneNonTerminal(TokenStream* tokenStream){
+	if(tokenStream->peekCurrent().type == END_OF_FILE) return true; 
 	if(!parseDeclaration(tokenStream)){
 		if(!parseAssignment(tokenStream)){
 			if(!parsePrintStatement(tokenStream)){
-				return false;
+				if(!parseOperatorStatement(tokenStream)){
+					return false;
+				}
 			}
 		}
 	}
@@ -24,49 +27,90 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream){
 }
 
 bool parseAssignment(TokenStream* tokenStream){
-	if(!parseId(tokenStream)) return false;
-	if(!parseAssign(tokenStream)) return false;
-	if(!parseNumber(tokenStream)) return false;
+	if(!checkId(tokenStream->peekCurrent().type)) return false;
+	
+	if(checkAssign(tokenStream->peekNext().type)){ 
+		tokenStream->moveToNext();
+	}else{
+		return false;
+	}
+
+	if(checkNumber(tokenStream->peekNext().type)){ 
+		tokenStream->moveToNext();
+	}else{
+		return false;
+	}
+
+	tokenStream->moveToNext();
+	
 	return true;
 }
 
 bool parseDeclaration(TokenStream* tokenStream){
-	if(!parseType(tokenStream)) return false;
-	if(!parseId(tokenStream)) return false;
+	if(!checkType(tokenStream->peekCurrent().type)) return false;
+	if(checkId(tokenStream->peekNext().type)){ 
+		tokenStream->moveToNext();
+	}else {
+		return false;
+	}
+	tokenStream->moveToNext();	
 	return true;
 }
 
 bool parsePrintStatement(TokenStream* tokenStream){
-	if(!parsePrint(tokenStream)) return false;
-	if(!parseId(tokenStream) && !parseNumber(tokenStream)) return false;
+	if(!checkPrint(tokenStream->peekCurrent().type)) return false;
+
+	if(checkId(tokenStream->peekNext().type) || checkNumber(tokenStream->peekNext().type)) {
+		tokenStream->moveToNext();
+	}else{
+		return false;
+	}
+	tokenStream->moveToNext();
 	return true;
 }
 
-bool parsePrint(TokenStream* tokenStream){
-	if(tokenStream->peekCurrent().type != PRINT) return false;
+bool parseOperatorStatement(TokenStream* tokenStream){
+	if(!checkId(tokenStream->peekCurrent().type) && !checkNumber(tokenStream->peekCurrent().type)) return false;
+	if(checkOperator(tokenStream->peekNext().type)){ 
+		tokenStream->moveToNext();
+	}else{
+		return false;
+	}
+
+	if(checkId(tokenStream->peekNext().type) || checkNumber(tokenStream->peekNext().type)){
+		tokenStream->moveToNext();
+	}else {
+		return false;
+	}
 	tokenStream->moveToNext();
+	return true;
+}
+
+bool checkOperator(TokenType tokenType){
+	if(tokenType != PLUS && tokenType != MINUS) return false;
+	return true;
+}
+
+bool checkPrint(TokenType tokenType){
+	if(tokenType != PRINT) return false;
 	return true;	
 }
 
-bool parseAssign(TokenStream* tokenStream){
-	if(tokenStream->peekCurrent().type != ASSIGN) return false;
-	tokenStream->moveToNext();
+bool checkAssign(TokenType tokenType){
+	if(tokenType != ASSIGN) return false;
 	return true;	
 }
 
-bool parseNumber(TokenStream* tokenStream){
-	if(tokenStream->peekCurrent().type != INT_NUM && tokenStream->peekCurrent().type != FLOAT_NUM) return false;
-	tokenStream->moveToNext();
+bool checkNumber(TokenType tokenType){
+	if(tokenType != INT_NUM && tokenType != FLOAT_NUM) return false;
 	return true;
 }
 
-bool parseType(TokenStream* tokenStream){
-	if(tokenStream->peekCurrent().type != FLOAT_DCL && tokenStream->peekCurrent().type != INT_DCL) return false;
-	tokenStream->moveToNext();
+bool checkType(TokenType tokenType){
+	if(tokenType != FLOAT_DCL && tokenType != INT_DCL) return false;
 	return true;
 }
-bool parseId(TokenStream* tokenStream){
-	if(tokenStream->peekCurrent().type != ID) return false;
-	tokenStream->moveToNext();
+bool checkId(TokenType tokenType){
+	if(tokenType != ID) return false;
 	return true;
 }

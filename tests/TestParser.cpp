@@ -34,12 +34,19 @@ bool checkParser5(){
     return parseProgram(tokenStream);
 }
 
+bool checkParser6(){
+    std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest6"));
+    TokenStream* tokenStream = new TokenStream(tokens);
+    return parseProgram(tokenStream);
+}
+
 void test_parser(){
     VERIFY("sourceTest1 passes as a legitimate program", checkParser1());
     VERIFY("sourceTest2 passes as a legitimate program", checkParser2());
     VERIFY("sourceTest3 passes as a legitimate program", checkParser3());
     VERIFY("sourceTest4 passes as a legitimate program", checkParser4());
     VERIFY("sourceTest5 passes as a legitimate program", checkParser5());
+    VERIFY("sourceTest6 passes as a legitimate program", checkParser6());
 }
 
 // register suite

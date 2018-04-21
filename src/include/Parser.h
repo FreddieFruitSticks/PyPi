@@ -6,12 +6,14 @@
 
 bool parseProgram(TokenStream*);
 bool parseDeclaration(TokenStream*);
-bool parseType(TokenStream*);
-bool parseId(TokenStream*);
+bool checkType(TokenType);
+bool checkId(TokenType);
 bool parseAssignment(TokenStream*);
-bool parseAssign(TokenStream*);
-bool parseNumber(TokenStream*);
+bool checkAssign(TokenType);
+bool checkNumber(TokenType);
 bool atLeastOneNonTerminal(TokenStream*);
 bool parsePrintStatement(TokenStream*);
-bool parsePrint(TokenStream*);
+bool checkPrint(TokenType);
+bool parseOperatorStatement(TokenStream*);
+bool checkOperator(TokenType);
 #endif /*_PARSER_H*/
