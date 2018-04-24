@@ -35,7 +35,7 @@ bool parseAssignment(TokenStream* tokenStream){
 		return false;
 	}
 
-	if(checkNumber(tokenStream->peekNext().type)){ 
+	if(checkNumber(tokenStream->peekNext().type) || checkId(tokenStream->peekNext().type)){ 
 		tokenStream->moveToNext();
 	}else{
 		return false;
@@ -53,7 +53,7 @@ bool parseAssignment(TokenStream* tokenStream){
 bool parseOperatorExpression(TokenStream* tokenStream){
 	if(!checkOperator(tokenStream->peekCurrent().type)) return false;
 
-	if(checkNumber(tokenStream->peekNext().type)){ 
+	if(checkNumber(tokenStream->peekNext().type) || checkId(tokenStream->peekNext().type)){ 
 		tokenStream->moveToNext();
 	}else{
 		return false;
@@ -63,7 +63,7 @@ bool parseOperatorExpression(TokenStream* tokenStream){
 		tokenStream->moveToNext();		 
 		return parseOperatorExpression(tokenStream);
 	}
-	tokenStream->moveToNext();		 	
+	tokenStream->moveToNext();	
 	return true;
 }
 
