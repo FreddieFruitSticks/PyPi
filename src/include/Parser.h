@@ -16,4 +16,5 @@ bool parsePrintStatement(TokenStream*);
 bool checkPrint(TokenType);
 bool parseOperatorStatement(TokenStream*);
 bool checkOperator(TokenType);
+bool parseOperatorExpression(TokenStream*);
 #endif /*_PARSER_H*/

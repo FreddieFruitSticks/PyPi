@@ -41,8 +41,29 @@ bool parseAssignment(TokenStream* tokenStream){
 		return false;
 	}
 
+	if(checkOperator(tokenStream->peekNext().type)){ 
+		tokenStream->moveToNext();
+		return parseOperatorExpression(tokenStream);
+	}
 	tokenStream->moveToNext();
 	
+	return true;
+}
+
+bool parseOperatorExpression(TokenStream* tokenStream){
+	if(!checkOperator(tokenStream->peekCurrent().type)) return false;
+
+	if(checkNumber(tokenStream->peekNext().type)){ 
+		tokenStream->moveToNext();
+	}else{
+		return false;
+	}
+
+	if(checkOperator(tokenStream->peekNext().type)){
+		tokenStream->moveToNext();		 
+		return parseOperatorExpression(tokenStream);
+	}
+	tokenStream->moveToNext();		 	
 	return true;
 }
 
