@@ -7,37 +7,60 @@
 bool checkParser1(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest1"));
 	TokenStream* tokenStream = new TokenStream(tokens);
-    return parseProgram(tokenStream);
+    TOKEN programToken;
+	programToken.type = NIL;
+	programToken.value = "PROGRAM";
+	AstNode programNode(programToken);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree(programNode);
+
+    bool parsed = parseProgram(tokenStream, AST);
+    AbstractSyntaxTree tree = *AST;
+
+    TOKEN eofToken;
+    eofToken.type = END_OF_FILE;
+    std::vector<AstNode> vec;
+    vec.push_back(tree.parentNode);
+
+    AstNode found = tree.breadthFirstSearch(vec, eofToken);
+    
+    return parsed;
 }
 
 bool checkParser2(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest2"));
 	TokenStream* tokenStream = new TokenStream(tokens);
-    return parseProgram(tokenStream);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree();    
+    return parseProgram(tokenStream, AST);
 }
 
 bool checkParser3(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest3"));
 	TokenStream* tokenStream = new TokenStream(tokens);
-    return parseProgram(tokenStream);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree();
+    return parseProgram(tokenStream, AST);
 }
 
 bool checkParser4(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest4"));
 	TokenStream* tokenStream = new TokenStream(tokens);
-    return parseProgram(tokenStream);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree();    
+    return parseProgram(tokenStream, AST);
 }
 
 bool checkParser5(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest5"));
 	TokenStream* tokenStream = new TokenStream(tokens);
-    return parseProgram(tokenStream);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree();
+    
+    return parseProgram(tokenStream, AST);
 }
 
 bool checkParser6(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest6"));
     TokenStream* tokenStream = new TokenStream(tokens);
-    return parseProgram(tokenStream);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree();
+    
+    return parseProgram(tokenStream, AST);
 }
 
 void test_parser(){

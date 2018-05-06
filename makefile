@@ -40,10 +40,10 @@ _TEST_INCLUDE_DIR = tests/include
 _TEST_OUTPUT_TARGET = test
 TEST_CFLAGS = -I$(_TEST_INCLUDE_DIR) -I$(INCLUDE_DIR) -I$(THIRD_PARTY_INCLUDE_DIR) -std=c++11
 
-_TEST_OBJS = TestScanner.o TestParser.o Testpp.o main.o TestAST.o
+_TEST_OBJS = TestScanner.o TestParser.o Testpp.o main.o TestAST.o TestParseTree.o
 TEST_OBJS = $(patsubst %, $(_TEST_BUILD_DIR)/%, $(_TEST_OBJS))
 
-_TEST_H = TestScanner.h TestParser.h Testpp.h TestAST.h
+_TEST_H = TestScanner.h TestParser.h Testpp.h TestAST.h TestParseTree.h
 TEST_DEPS = $(patsubst %, $(_TEST_INCLUDE_DIR)/%, $(_TEST_H))
 
 clean-tests: 

@@ -26,6 +26,7 @@ bool testBFS(){
 
     std::vector<AstNode> vector;
     vector.push_back(node);
+    
     AstNode node1 = tree.breadthFirstSearch(vector, token3);
 
     if(node1.token == token3){

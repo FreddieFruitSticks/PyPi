@@ -4,10 +4,12 @@
 #include <AstNode.h>
 
 class AbstractSyntaxTree{
-    private:
+    public:
         AstNode parentNode;
     public:
         AbstractSyntaxTree(AstNode);
+        AbstractSyntaxTree();
+    
         AstNode breadthFirstSearch(std::vector<AstNode>, TOKEN);
 };
 
