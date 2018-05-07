@@ -7,9 +7,11 @@
 
 bool parseProgram(TokenStream*, AbstractSyntaxTree*);
 AbstractSyntaxTree initialiseAST(TokenStream*);
-bool parseDeclaration(TokenStream*);
-bool checkType(TokenType);
-bool checkId(TokenType);
+// bool parseDeclaration(TokenStream*);
+AstNode* parseDeclaration(TokenStream*);
+AstNode* checkType(TOKEN);
+AstNode* checkId(TOKEN);
+bool checkId(TokenType tokenType);
 bool parseAssignment(TokenStream*);
 bool checkAssign(TokenType);
 bool checkNumber(TokenType);

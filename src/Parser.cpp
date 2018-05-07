@@ -37,7 +37,8 @@ bool parseProgram(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 
 bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 	if(tokenStream->peekCurrent().type == END_OF_FILE) return true; 
-	if(!parseDeclaration(tokenStream)){
+	AstNode* dclNode = parseDeclaration(tokenStream);
+	if(dclNode == NULL){
 		if(!parseAssignment(tokenStream)){
 			if(!parsePrintStatement(tokenStream)){
 				if(!parseOperatorStatement(tokenStream)){
@@ -45,6 +46,8 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 				}
 			}
 		}
+	}else{
+		AST->parentNode.setNextChild(*dclNode);
 	}
 	return true;
 }
@@ -90,15 +93,18 @@ bool parseOperatorExpression(TokenStream* tokenStream){
 	return true;
 }
 
-bool parseDeclaration(TokenStream* tokenStream){
-	if(!checkType(tokenStream->peekCurrent().type)) return false;
-	if(checkId(tokenStream->peekNext().type)){
+AstNode* parseDeclaration(TokenStream* tokenStream){
+	AstNode* typeNode = checkType(tokenStream->peekCurrent());
+	if(typeNode == NULL) return NULL;
+	AstNode* idNode = checkId(tokenStream->peekNext());
+	if(idNode != NULL){
+		typeNode->setNextChild(*idNode);
 		tokenStream->moveToNext();
 	}else {
-		return false;
+		return NULL;
 	}
 	tokenStream->moveToNext();	
-	return true;
+	return typeNode;
 }
 
 bool parsePrintStatement(TokenStream* tokenStream){
@@ -150,11 +156,18 @@ bool checkNumber(TokenType tokenType){
 	return true;
 }
 
-bool checkType(TokenType tokenType){
-	if(tokenType != FLOAT_DCL && tokenType != INT_DCL) return false;
-	return true;
+AstNode* checkType(TOKEN token){
+	if(token.type == FLOAT_DCL || token.type == INT_DCL) {
+		return new AstNode(token);
+	}
+	return NULL;
 }
 bool checkId(TokenType tokenType){
 	if(tokenType != ID) return false;
 	return true;
+	
+}
+AstNode* checkId(TOKEN token){
+	if(token.type != ID) return NULL;
+	return new AstNode(token);
 }

@@ -13,13 +13,23 @@ bool testForProgramNode(){
     AbstractSyntaxTree tree = initialiseAST(tokenStream);
     TOKEN programToken;
     TOKEN eofToken;
+    TOKEN dclToken;
+    TOKEN idToken;
     eofToken.type = END_OF_FILE;
+    dclToken.type = INT_DCL;
+    idToken.type = ID;
+    idToken.value = "num";
     programToken.type = NIL;
     programToken.value = "PROGRAM";
 
     if(tree.parentNode.token == programToken) {
-        if(tree.parentNode.childNodes.front().token == eofToken) {
-            return true;
+        if(tree.parentNode.childNodes.back().token == eofToken) {
+            tree.parentNode.childNodes.pop_back();
+            if(tree.parentNode.childNodes.back().token == dclToken){
+                if(tree.parentNode.childNodes.back().childNodes.back().token == idToken) {
+                    return true;
+                }
+            }
         }
     }
 
@@ -27,7 +37,7 @@ bool testForProgramNode(){
 }
 
 void test_parse_AST(){
-    VERIFY("Tree contains program node", testForProgramNode());
+    VERIFY("Tree contains program node, declaration Node, id node and eof Node", testForProgramNode());
 }
 
 // register suite
