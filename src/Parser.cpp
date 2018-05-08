@@ -40,10 +40,13 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 	AstNode* dclNode = parseDeclaration(tokenStream);
 	if(dclNode == NULL){
 		if(!parseAssignment(tokenStream)){
-			if(!parsePrintStatement(tokenStream)){
+			AstNode* printStm = parsePrintStatement(tokenStream);
+			if(printStm == NULL){
 				if(!parseOperatorStatement(tokenStream)){
 					return false;
 				}
+			}else{
+				AST->parentNode.setNextChild(*printStm);
 			}
 		}
 	}else{
@@ -107,16 +110,24 @@ AstNode* parseDeclaration(TokenStream* tokenStream){
 	return typeNode;
 }
 
-bool parsePrintStatement(TokenStream* tokenStream){
-	if(!checkPrint(tokenStream->peekCurrent().type)) return false;
-
-	if(checkId(tokenStream->peekNext().type) || checkNumber(tokenStream->peekNext().type)) {
-		tokenStream->moveToNext();
+AstNode* parsePrintStatement(TokenStream* tokenStream){
+	AstNode* printNode = checkPrint(tokenStream->peekCurrent());
+	if(printNode == NULL) return NULL;
+	AstNode* idNode = checkId(tokenStream->peekNext());
+	if(idNode == NULL){
+		AstNode* numNode = checkNumber(tokenStream->peekNext());
+		if(numNode == NULL){
+			return NULL;
+		}else{
+			printNode->setNextChild(*numNode);
+			tokenStream->moveToNext();				
+		}
 	}else{
-		return false;
+		printNode->setNextChild(*idNode);
+		tokenStream->moveToNext();		
 	}
 	tokenStream->moveToNext();
-	return true;
+	return printNode;
 }
 
 bool parseOperatorStatement(TokenStream* tokenStream){
@@ -141,9 +152,9 @@ bool checkOperator(TokenType tokenType){
 	return true;
 }
 
-bool checkPrint(TokenType tokenType){
-	if(tokenType != PRINT) return false;
-	return true;	
+AstNode* checkPrint(TOKEN token){
+	if(token.type != PRINT) return NULL;
+	return new AstNode(token);
 }
 
 bool checkAssign(TokenType tokenType){
@@ -154,6 +165,11 @@ bool checkAssign(TokenType tokenType){
 bool checkNumber(TokenType tokenType){
 	if(tokenType != INT_NUM && tokenType != FLOAT_NUM) return false;
 	return true;
+}
+
+AstNode* checkNumber(TOKEN token){
+	if(token.type != INT_NUM && token.type != FLOAT_NUM) return NULL;
+	return new AstNode(token);
 }
 
 AstNode* checkType(TOKEN token){
