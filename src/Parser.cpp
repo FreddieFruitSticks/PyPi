@@ -42,8 +42,11 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 		if(!parseAssignment(tokenStream)){
 			AstNode* printStm = parsePrintStatement(tokenStream);
 			if(printStm == NULL){
-				if(!parseOperatorStatement(tokenStream)){
+				AstNode* operatorNode = parseOperatorStatement(tokenStream);
+				if(operatorNode == NULL){
 					return false;
+				}else{
+					AST->parentNode.setNextChild(*operatorNode);					
 				}
 			}else{
 				AST->parentNode.setNextChild(*printStm);
@@ -130,26 +133,58 @@ AstNode* parsePrintStatement(TokenStream* tokenStream){
 	return printNode;
 }
 
-bool parseOperatorStatement(TokenStream* tokenStream){
-	if(!checkId(tokenStream->peekCurrent().type) && !checkNumber(tokenStream->peekCurrent().type)) return false;
-	if(checkOperator(tokenStream->peekNext().type)){ 
+AstNode* parseOperatorStatement(TokenStream* tokenStream){
+	AstNode* node;
+	AstNode* idNode = checkId(tokenStream->peekCurrent());
+	if(idNode == NULL){
+		AstNode* numberNode = checkNumber(tokenStream->peekCurrent());
+		if(numberNode == NULL){
+			return NULL;
+		}else{
+			node = numberNode;
+		}
+	}else{
+		node = idNode;
+	}
+	AstNode* operatorNode = checkOperator(tokenStream->peekNext());
+	if(operatorNode != NULL){
+		operatorNode->setNextChild(*node); 
 		tokenStream->moveToNext();
 	}else{
-		return false;
+		return NULL;
 	}
 
-	if(checkId(tokenStream->peekNext().type) || checkNumber(tokenStream->peekNext().type)){
+	AstNode* nextNode;
+	AstNode* nextIdNode = checkId(tokenStream->peekNext());
+	if(nextIdNode == NULL){
+		AstNode* nextNumberNode = checkNumber(tokenStream->peekNext());
+		if(nextNumberNode  == NULL){
+			return NULL;
+		}else{
+			nextNode =  nextNumberNode ;
+		}
+	}else{
+		nextNode = nextIdNode;
+	}
+
+	if(nextNode != NULL){
+		operatorNode->setNextChild(*nextNode);
 		tokenStream->moveToNext();
 	}else {
-		return false;
+		return NULL;
 	}
 	tokenStream->moveToNext();
-	return true;
+	return operatorNode;
 }
 
 bool checkOperator(TokenType tokenType){
 	if(tokenType != PLUS && tokenType != MINUS) return false;
 	return true;
+}
+
+AstNode* checkOperator(TOKEN token){
+	if(token.type != PLUS && token.type != MINUS) return NULL;
+	return new AstNode(token);
 }
 
 AstNode* checkPrint(TOKEN token){
@@ -178,11 +213,13 @@ AstNode* checkType(TOKEN token){
 	}
 	return NULL;
 }
+
 bool checkId(TokenType tokenType){
 	if(tokenType != ID) return false;
 	return true;
 	
 }
+
 AstNode* checkId(TOKEN token){
 	if(token.type != ID) return NULL;
 	return new AstNode(token);

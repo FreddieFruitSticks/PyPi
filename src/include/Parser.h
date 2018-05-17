@@ -16,10 +16,12 @@ bool parseAssignment(TokenStream*);
 bool checkAssign(TokenType);
 AstNode* checkNumber(TOKEN);
 bool checkNumber(TokenType);
+AstNode* checkNumber(TOKEN);
 bool atLeastOneNonTerminal(TokenStream*, AbstractSyntaxTree*);
 AstNode* parsePrintStatement(TokenStream*);
 AstNode* checkPrint(TOKEN);
-bool parseOperatorStatement(TokenStream*);
+AstNode* parseOperatorStatement(TokenStream*);
 bool checkOperator(TokenType);
+AstNode* checkOperator(TOKEN);
 bool parseOperatorExpression(TokenStream*);
 #endif /*_PARSER_H*/
