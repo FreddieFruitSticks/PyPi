@@ -33,4 +33,11 @@ inline bool operator==(const TOKEN& lhs, const TOKEN& rhs){
 	}
 	return false;
 }
+
+inline bool operator!=(const TOKEN& lhs, const TOKEN& rhs){
+	if(lhs.type != rhs.type || lhs.value != rhs.value){
+		return true;
+	}
+	return false;
+}
 #endif /*_SCANNER_H*/

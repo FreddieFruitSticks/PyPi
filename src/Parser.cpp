@@ -39,7 +39,8 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 	if(tokenStream->peekCurrent().type == END_OF_FILE) return true; 
 	AstNode* dclNode = parseDeclaration(tokenStream);
 	if(dclNode == NULL){
-		if(!parseAssignment(tokenStream)){
+		AstNode* assignmentStmNode = parseAssignment(tokenStream);
+		if(assignmentStmNode == NULL){
 			AstNode* printStm = parsePrintStatement(tokenStream);
 			if(printStm == NULL){
 				AstNode* operatorNode = parseOperatorStatement(tokenStream);
@@ -51,6 +52,8 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 			}else{
 				AST->parentNode.setNextChild(*printStm);
 			}
+		}else{
+			AST->parentNode.setNextChild(*assignmentStmNode);
 		}
 	}else{
 		AST->parentNode.setNextChild(*dclNode);
@@ -58,28 +61,42 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 	return true;
 }
 
-bool parseAssignment(TokenStream* tokenStream){
-	if(!checkId(tokenStream->peekCurrent().type)) return false;
-	
-	if(checkAssign(tokenStream->peekNext().type)){ 
-		tokenStream->moveToNext();
-	}else{
-		return false;
-	}
+AstNode* parseAssignment(TokenStream* tokenStream){
+	AstNode* idNode = checkId(tokenStream->peekCurrent());
+	if(idNode == NULL) return NULL;
 
-	if(checkNumber(tokenStream->peekNext().type) || checkId(tokenStream->peekNext().type)){ 
-		tokenStream->moveToNext();
-	}else{
-		return false;
-	}
+	AstNode* assignNode = checkAssign(tokenStream->peekNext());
+	if(assignNode == NULL) return NULL;
 
-	if(checkOperator(tokenStream->peekNext().type)){ 
-		tokenStream->moveToNext();
-		return parseOperatorExpression(tokenStream);
-	}
+	assignNode->setNextChild(*idNode);
 	tokenStream->moveToNext();
+	tokenStream->moveToNext();
+
+	AstNode* operatorNode = parseOperatorStatement(tokenStream);
+	if(operatorNode == NULL){
+		if(checkNumber(tokenStream->peekCurrent().type) || checkId(tokenStream->peekCurrent().type)){ 
+			AstNode* nextNode;
+			AstNode* nextIdNode = checkId(tokenStream->peekCurrent());
+			if(nextIdNode == NULL){
+				AstNode* nextNumberNode = checkNumber(tokenStream->peekCurrent());
+				if(nextNumberNode  == NULL){
+					return NULL;
+				}else{
+					nextNode = nextNumberNode;
+				}
+			}else{
+				nextNode = nextIdNode;
+			}
+			assignNode->setNextChild(*nextNode);
+			tokenStream->moveToNext();
+		}else{
+			return NULL;			
+		}
+	}else{
+		assignNode->setNextChild(*operatorNode);			
+	}
 	
-	return true;
+	return assignNode;
 }
 
 bool parseOperatorExpression(TokenStream* tokenStream){
@@ -161,19 +178,28 @@ AstNode* parseOperatorStatement(TokenStream* tokenStream){
 		if(nextNumberNode  == NULL){
 			return NULL;
 		}else{
-			nextNode =  nextNumberNode ;
+			nextNode = nextNumberNode;
 		}
 	}else{
 		nextNode = nextIdNode;
 	}
 
 	if(nextNode != NULL){
-		operatorNode->setNextChild(*nextNode);
 		tokenStream->moveToNext();
+		if(checkOperator(tokenStream->peekNext().type)){
+			AstNode* operatorStmNode = parseOperatorStatement(tokenStream);
+			if(operatorStmNode == NULL){
+				return NULL;
+			}else{
+				operatorNode->setNextChild(*operatorStmNode);
+			}
+		}else{
+			operatorNode->setNextChild(*nextNode);
+			tokenStream->moveToNext();				
+		}
 	}else {
 		return NULL;
 	}
-	tokenStream->moveToNext();
 	return operatorNode;
 }
 
@@ -195,6 +221,11 @@ AstNode* checkPrint(TOKEN token){
 bool checkAssign(TokenType tokenType){
 	if(tokenType != ASSIGN) return false;
 	return true;	
+}
+
+AstNode* checkAssign(TOKEN token){
+	if(token.type != ASSIGN) return NULL;
+	return new AstNode(token);
 }
 
 bool checkNumber(TokenType tokenType){

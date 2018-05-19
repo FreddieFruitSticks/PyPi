@@ -64,12 +64,12 @@ bool checkParser6(){
 }
 
 void test_parser(){
-    VERIFY("sourceTest1 passes as a legitimate program", checkParser1());
-    VERIFY("sourceTest2 passes as a legitimate program", checkParser2());
-    VERIFY("sourceTest3 passes as a legitimate program", checkParser3());
-    VERIFY("sourceTest4 passes as a legitimate program", checkParser4());
-    VERIFY("sourceTest5 passes as a legitimate program", checkParser5());
-    VERIFY("sourceTest6 passes as a legitimate program", checkParser6());
+    VERIFY("sourceTest1 float dcl", checkParser1());
+    VERIFY("sourceTest2 int and float dcl", checkParser2());
+    VERIFY("sourceTest3 float dcl and assign sum", checkParser3());
+    VERIFY("sourceTest4 print id and num", checkParser4());
+    VERIFY("sourceTest5 assign sum and print", checkParser5());
+    VERIFY("sourceTest6 sum and assign ids", checkParser6());
 }
 
 // register suite
