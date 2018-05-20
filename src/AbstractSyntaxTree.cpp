@@ -27,3 +27,17 @@ AstNode AbstractSyntaxTree::breadthFirstSearch(std::vector<AstNode> vector, TOKE
 
     return breadthFirstSearch(vector, token);
 }
+
+void AbstractSyntaxTree::processSyntaxTree(std::vector<AstNode>* stack, void (*processor)(AstNode node, std::vector<AstNode>* allNode), std::vector<AstNode>* allNodes){
+    if(!stack->empty()){
+        AstNode node = stack->back();
+        stack->pop_back();
+        (*processor)(node, allNodes);
+        if(!node.childNodes.empty()){
+            for(std::vector<AstNode>::iterator it = node.childNodes.begin(); it != node.childNodes.end(); it++){
+                stack->push_back(*it);
+            }
+        }
+        processSyntaxTree(stack, processor, allNodes);
+    }
+}

@@ -166,6 +166,10 @@ bool testForMultipleOperatorNode(){
     return false;
 }
 
+void printNodes(AstNode node, std::vector<AstNode>* allNodes){
+    allNodes->push_back(node);
+}
+
 bool testAssignNode(){
     std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parse_tree/sourceTest5"));
     TokenStream* tokenStream = new TokenStream(tokens);
@@ -186,20 +190,80 @@ bool testAssignNode(){
     numberToken.type = INT_NUM;
     numberToken.value = "5";
 
-    if(tree.parentNode.token == programToken) {
-        if(tree.parentNode.childNodes.back().token == eofToken) {
-            tree.parentNode.childNodes.pop_back();
-            if(tree.parentNode.childNodes.back().token == assignToken){
-                if(tree.parentNode.childNodes.back().childNodes.back().token == numberToken) {
-                    tree.parentNode.childNodes.back().childNodes.pop_back();
-                    if(tree.parentNode.childNodes.back().childNodes.back().token == idToken){
-                        return true;
-                    }
-                }
-            }
+    std::vector<AstNode>* stack = new std::vector<AstNode>();
+    std::vector<AstNode>* allNodes = new std::vector<AstNode>();
+    stack->push_back(tree.parentNode);
+    void (*processor)(AstNode, std::vector<AstNode>*) = &printNodes;
+    tree.processSyntaxTree(stack, processor, allNodes);
+
+    TOKEN tokensArray[5] = {programToken, eofToken, assignToken, numberToken, idToken};
+    int i = 0;
+    for(std::vector<AstNode>::iterator it = allNodes->begin(); it != allNodes->end(); it++){
+        std::cout << it->token << std::endl;
+        if(it->token != tokensArray[i]){
+            return false;
         }
+        i++;
     }
-    return false;
+    return true;
+}
+
+bool testAssignOfSumNode(){
+    std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parse_tree/sourceTest6"));
+    TokenStream* tokenStream = new TokenStream(tokens);
+
+    AbstractSyntaxTree tree = initialiseAST(tokenStream);
+    TOKEN programToken;
+    TOKEN eofToken;
+    TOKEN idToken;
+    TOKEN assignToken;
+    TOKEN numberToken1;
+    TOKEN numberToken2;
+    TOKEN plusToken;
+
+    programToken.type = NIL;
+    programToken.value = "PROGRAM";
+    eofToken.type = END_OF_FILE;
+    idToken.type = ID;
+    idToken.value = "numA";
+    assignToken.type = ASSIGN;
+    numberToken1.type = INT_NUM;
+    numberToken1.value = "1";
+    numberToken2.type = INT_NUM;
+    numberToken2.value = "2";
+    plusToken.type = PLUS;
+
+    std::vector<AstNode>* stack = new std::vector<AstNode>();
+    std::vector<AstNode>* allNodes = new std::vector<AstNode>();
+    stack->push_back(tree.parentNode);
+    void (*processor)(AstNode, std::vector<AstNode>*) = &printNodes;
+    tree.processSyntaxTree(stack, processor, allNodes);
+
+    TOKEN tokensArray[7] = {programToken, eofToken, assignToken, plusToken, numberToken2, numberToken1, idToken};
+    int i = 0;
+    for(std::vector<AstNode>::iterator it = allNodes->begin(); it != allNodes->end(); it++){
+        std::cout << it->token << std::endl;
+        if(it->token != tokensArray[i]){
+            return false;
+        }
+        i++;
+    }
+    return true;
+
+    // if(tree.parentNode.token == programToken) {
+    //     if(tree.parentNode.childNodes.back().token == eofToken) {
+    //         tree.parentNode.childNodes.pop_back();
+    //         if(tree.parentNode.childNodes.back().token == assignToken){
+    //             if(tree.parentNode.childNodes.back().childNodes.back().token == numberToken1) {
+    //                 tree.parentNode.childNodes.back().childNodes.pop_back();
+    //                 if(tree.parentNode.childNodes.back().childNodes.back().token == idToken){
+    //                     return true;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // return false;
 }
 
 void test_parse_AST(){
@@ -208,6 +272,7 @@ void test_parse_AST(){
     VERIFY("SourceTest3 - operator nodes", testForOperatorNode());
     VERIFY("SourceTest4 - multiple operator nodes", testForMultipleOperatorNode());
     VERIFY("SourceTest5 - assign nodes", testAssignNode());
+    VERIFY("SourceTest6 - assign sum nodes", testAssignOfSumNode());
 }
 
 // register suite
