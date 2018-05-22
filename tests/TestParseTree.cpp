@@ -243,11 +243,13 @@ bool testAssignOfSumNode(){
     int i = 0;
     for(std::vector<AstNode>::iterator it = allNodes->begin(); it != allNodes->end(); it++){
         std::cout << it->token << std::endl;
+            // std::cout << (it->theParentNode)->token<<std::endl;
         if(it->token != tokensArray[i]){
             return false;
         }
         i++;
     }
+
     return true;
 
     // if(tree.parentNode.token == programToken) {

@@ -27,6 +27,7 @@ bool parseProgram(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 	if(!atLeastOneNonTerminal(tokenStream, AST)) return false;
 	if(tokenStream->peekCurrent().type == END_OF_FILE){
 		AstNode endFileNode = createNode(END_OF_FILE, "");
+		endFileNode.setTheParenNode((AST->parentNode));
 		AST->parentNode.setNextChild(endFileNode);
 		return true;
 	}else{
