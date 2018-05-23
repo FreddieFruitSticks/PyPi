@@ -167,6 +167,9 @@ bool testForMultipleOperatorNode(){
 }
 
 void printNodes(AstNode node, std::vector<AstNode>* allNodes){
+    if(node.theParentNode != NULL){
+        std::cout<<"*(*(*(*( "<<node.token<<" "<<node.theParentNode->token<<std::endl;
+    }
     allNodes->push_back(node);
 }
 
@@ -199,10 +202,13 @@ bool testAssignNode(){
     TOKEN tokensArray[5] = {programToken, eofToken, assignToken, numberToken, idToken};
     int i = 0;
     for(std::vector<AstNode>::iterator it = allNodes->begin(); it != allNodes->end(); it++){
-        std::cout << it->token << std::endl;
+        // std::cout << it->token << std::endl;
+        // std::cout << it->token << std::endl;
         if(it->token != tokensArray[i]){
+            std::cout << "!!!!!!!" << std::endl;
             return false;
         }
+
         i++;
     }
     return true;
@@ -233,6 +239,20 @@ bool testAssignOfSumNode(){
     numberToken2.value = "2";
     plusToken.type = PLUS;
 
+    AstNode programNode(programToken);
+    AstNode eofNode(eofToken);
+    eofNode.setTheParenNode(programNode);
+    AstNode assignNode(assignToken);
+    assignNode.setTheParenNode(programNode);
+    AstNode plusNode(plusToken);
+    plusNode.setTheParenNode(assignNode);    
+    AstNode numberNode2(numberToken2);
+    numberNode2.setTheParenNode(plusNode);
+    AstNode numberNode1(numberToken1);
+    numberNode1.setTheParenNode(plusNode);
+    AstNode idNode(idToken);
+    idNode.setTheParenNode(programNode);
+
     std::vector<AstNode>* stack = new std::vector<AstNode>();
     std::vector<AstNode>* allNodes = new std::vector<AstNode>();
     stack->push_back(tree.parentNode);
@@ -240,11 +260,19 @@ bool testAssignOfSumNode(){
     tree.processSyntaxTree(stack, processor, allNodes);
 
     TOKEN tokensArray[7] = {programToken, eofToken, assignToken, plusToken, numberToken2, numberToken1, idToken};
+    AstNode astNodeArray[7] = {programNode, eofNode, assignNode, plusNode, numberNode2, numberNode1, idNode};
     int i = 0;
     for(std::vector<AstNode>::iterator it = allNodes->begin(); it != allNodes->end(); it++){
-        std::cout << it->token << std::endl;
-            // std::cout << (it->theParentNode)->token<<std::endl;
-        if(it->token != tokensArray[i]){
+        // std::cout << it->token << std::endl;
+            // std::cout <<"!!!"<< (it->theParentNode)->token<<std::endl;
+        if(it->token != astNodeArray[i].token || 
+            ((it->token).value != "PROGRAM" && it->theParentNode == NULL) ||
+            ((it->token).value != "PROGRAM" && (it->theParentNode)->token != (astNodeArray[i].theParentNode)->token)){
+            std::cout<<it->token<<std::endl;
+            if(it->theParentNode == NULL){
+                std::cout<<"Parent is NULL"<<std::endl;
+                
+            }
             return false;
         }
         i++;

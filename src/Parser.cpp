@@ -3,11 +3,11 @@
 #include <TokenStream.h>
 #include <AbstractSyntaxTree.h>
 
-AstNode createNode(TokenType tokenType, std::string tokenValue){
+AstNode* createNode(TokenType tokenType, std::string tokenValue){
 	TOKEN token;
 	token.type = tokenType;
 	if(tokenValue != "") token.value = tokenValue;
-	return AstNode(token);
+	return new AstNode(token);
 }
 
 AbstractSyntaxTree initialiseAST(TokenStream* tokenStream){
@@ -26,9 +26,9 @@ AbstractSyntaxTree initialiseAST(TokenStream* tokenStream){
 bool parseProgram(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 	if(!atLeastOneNonTerminal(tokenStream, AST)) return false;
 	if(tokenStream->peekCurrent().type == END_OF_FILE){
-		AstNode endFileNode = createNode(END_OF_FILE, "");
-		endFileNode.setTheParenNode((AST->parentNode));
-		AST->parentNode.setNextChild(endFileNode);
+		AstNode* endFileNode = createNode(END_OF_FILE, "");
+		endFileNode->setTheParenNode((AST->parentNode));
+		AST->parentNode.setNextChild(*endFileNode);
 		return true;
 	}else{
 		return parseProgram(tokenStream, AST);
@@ -45,18 +45,23 @@ bool atLeastOneNonTerminal(TokenStream* tokenStream, AbstractSyntaxTree* AST){
 			AstNode* printStm = parsePrintStatement(tokenStream);
 			if(printStm == NULL){
 				AstNode* operatorNode = parseOperatorStatement(tokenStream);
+				
 				if(operatorNode == NULL){
 					return false;
 				}else{
+					operatorNode->setTheParenNode((AST->parentNode));
 					AST->parentNode.setNextChild(*operatorNode);					
 				}
 			}else{
+				printStm->setTheParenNode((AST->parentNode));
 				AST->parentNode.setNextChild(*printStm);
 			}
 		}else{
+			assignmentStmNode->setTheParenNode((AST->parentNode));
 			AST->parentNode.setNextChild(*assignmentStmNode);
 		}
 	}else{
+		dclNode->setTheParenNode((AST->parentNode));
 		AST->parentNode.setNextChild(*dclNode);
 	}
 	return true;
@@ -70,11 +75,12 @@ AstNode* parseAssignment(TokenStream* tokenStream){
 	if(assignNode == NULL) return NULL;
 
 	assignNode->setNextChild(*idNode);
+	idNode->setTheParenNode(*assignNode);
 	tokenStream->moveToNext();
 	tokenStream->moveToNext();
 
 	AstNode* operatorNode = parseOperatorStatement(tokenStream);
-	if(operatorNode == NULL){
+	if(operatorNode == NULL) {
 		if(checkNumber(tokenStream->peekCurrent().type) || checkId(tokenStream->peekCurrent().type)){ 
 			AstNode* nextNode;
 			AstNode* nextIdNode = checkId(tokenStream->peekCurrent());
@@ -89,12 +95,14 @@ AstNode* parseAssignment(TokenStream* tokenStream){
 				nextNode = nextIdNode;
 			}
 			assignNode->setNextChild(*nextNode);
+			nextNode->setTheParenNode(*assignNode);
 			tokenStream->moveToNext();
-		}else{
+		}else {
 			return NULL;			
 		}
-	}else{
-		assignNode->setNextChild(*operatorNode);			
+	}else {
+		assignNode->setNextChild(*operatorNode);
+		operatorNode->setTheParenNode(*assignNode);			
 	}
 	
 	return assignNode;
@@ -166,7 +174,8 @@ AstNode* parseOperatorStatement(TokenStream* tokenStream){
 	}
 	AstNode* operatorNode = checkOperator(tokenStream->peekNext());
 	if(operatorNode != NULL){
-		operatorNode->setNextChild(*node); 
+		operatorNode->setNextChild(*node);
+		node->setTheParenNode(*operatorNode); 
 		tokenStream->moveToNext();
 	}else{
 		return NULL;
@@ -193,9 +202,11 @@ AstNode* parseOperatorStatement(TokenStream* tokenStream){
 				return NULL;
 			}else{
 				operatorNode->setNextChild(*operatorStmNode);
+				operatorStmNode->setTheParenNode(*operatorNode);
 			}
 		}else{
 			operatorNode->setNextChild(*nextNode);
+			nextNode->setTheParenNode(*operatorNode);
 			tokenStream->moveToNext();				
 		}
 	}else {

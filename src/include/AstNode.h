@@ -8,9 +8,7 @@ class AstNode{
         std::vector<AstNode> childNodes;
         AstNode* theParentNode = NULL;
     
-    // AstNode(TOKEN, AstNode&);
-    // AstNode(AstNode&);
-    // AstNode(const AstNode& astNode);
+    AstNode(const AstNode&);
     // ~AstNode();
     AstNode(TOKEN);
     AstNode();
