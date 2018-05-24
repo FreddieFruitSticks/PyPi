@@ -20,8 +20,8 @@ AstNode AbstractSyntaxTree::breadthFirstSearch(std::vector<AstNode> vector, TOKE
     if(node.token == token) return node;
     vector.erase(vector.begin(), vector.begin() + 1);
     if(!node.childNodes.empty()){
-        for(std::vector<AstNode>::iterator it = node.childNodes.begin(); it != node.childNodes.end(); it++){
-            vector.push_back(*it);
+        for(std::vector<AstNode*>::iterator it = node.childNodes.begin(); it != node.childNodes.end(); it++){
+            vector.push_back(**it);
         }
     }
 
@@ -29,13 +29,15 @@ AstNode AbstractSyntaxTree::breadthFirstSearch(std::vector<AstNode> vector, TOKE
 }
 
 void AbstractSyntaxTree::processSyntaxTree(std::vector<AstNode>* stack, void (*processor)(AstNode node, std::vector<AstNode>* allNode), std::vector<AstNode>* allNodes){
+    
     if(!stack->empty()){
-        AstNode node = stack->back();
-        stack->pop_back();
+        AstNode node = stack->front();
+        stack->erase(stack->begin(), stack->begin() + 1);
+        
         (*processor)(node, allNodes);
         if(!node.childNodes.empty()){
-            for(std::vector<AstNode>::iterator it = node.childNodes.begin(); it != node.childNodes.end(); it++){
-                stack->push_back(*it);
+            for(std::vector<AstNode*>::iterator it = node.childNodes.begin(); it != node.childNodes.end(); it++){
+                stack->push_back(**it);
             }
         }
         processSyntaxTree(stack, processor, allNodes);

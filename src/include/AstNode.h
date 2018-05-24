@@ -5,14 +5,14 @@
 class AstNode{
     public:
         TOKEN token;
-        std::vector<AstNode> childNodes;
+        std::vector<AstNode*> childNodes;
         AstNode* theParentNode = NULL;
     
     AstNode(const AstNode&);
     // ~AstNode();
     AstNode(TOKEN);
     AstNode();
-    void setNextChild(AstNode);
+    void setNextChild(AstNode*);
     void setTheParenNode(AstNode&);
 };
 #endif

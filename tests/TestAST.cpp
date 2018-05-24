@@ -16,8 +16,8 @@ bool testBFS(){
     token3.value = "6";
 
     AstNode node(token);
-    AstNode node2(token2);
-    AstNode node3(token3);
+    AstNode* node2 = new AstNode(token2);
+    AstNode* node3 = new AstNode(token3);
 
     node.setNextChild(node2);
     node.setNextChild(node3);

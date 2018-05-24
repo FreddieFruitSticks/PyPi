@@ -14,7 +14,7 @@ AstNode::AstNode(const AstNode& astNode){
     theParentNode = astNode.theParentNode;
 }
 
-void AstNode::setNextChild(AstNode newNode){
+void AstNode::setNextChild(AstNode* newNode){
     childNodes.push_back(newNode);
 }
 
