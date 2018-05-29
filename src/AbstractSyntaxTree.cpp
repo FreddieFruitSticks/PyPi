@@ -43,3 +43,21 @@ void AbstractSyntaxTree::processSyntaxTree(std::vector<AstNode>* stack, void (*p
         processSyntaxTree(stack, processor, allNodes);
     }
 }
+
+void AbstractSyntaxTree::processSyntaxTree(std::vector<AstNode>* stack, void (*processor)(AstNode node)){
+    
+    if(!stack->empty()){
+        AstNode node = stack->front();
+        stack->erase(stack->begin(), stack->begin() + 1);
+        if(node.theParentNode != NULL){
+            std::cout<<"!!!! "<< node.token << " parent:  "<< node.theParentNode->token <<std::endl;
+        }
+        // node.accept(processor);
+        if(!node.childNodes.empty()){
+            for(std::vector<AstNode*>::iterator it = node.childNodes.begin(); it != node.childNodes.end(); it++){
+                stack->push_back(**it);
+            }
+        }
+        processSyntaxTree(stack, processor);
+    }
+}

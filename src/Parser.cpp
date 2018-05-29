@@ -15,6 +15,7 @@ AbstractSyntaxTree initialiseAST(TokenStream* tokenStream){
 	programToken.type = NIL;
 	programToken.value = "PROGRAM";
 	AstNode programNode(programToken);
+	
 	AbstractSyntaxTree* AST = new AbstractSyntaxTree(programNode);
 
 	bool isParsed = parseProgram(tokenStream, AST);
@@ -106,23 +107,6 @@ AstNode* parseAssignment(TokenStream* tokenStream){
 	}
 	
 	return assignNode;
-}
-
-bool parseOperatorExpression(TokenStream* tokenStream){
-	if(!checkOperator(tokenStream->peekCurrent().type)) return false;
-
-	if(checkNumber(tokenStream->peekNext().type) || checkId(tokenStream->peekNext().type)){ 
-		tokenStream->moveToNext();
-	}else{
-		return false;
-	}
-
-	if(checkOperator(tokenStream->peekNext().type)){
-		tokenStream->moveToNext();		 
-		return parseOperatorExpression(tokenStream);
-	}
-	tokenStream->moveToNext();	
-	return true;
 }
 
 AstNode* parseDeclaration(TokenStream* tokenStream){
@@ -228,11 +212,6 @@ AstNode* checkOperator(TOKEN token){
 AstNode* checkPrint(TOKEN token){
 	if(token.type != PRINT) return NULL;
 	return new AstNode(token);
-}
-
-bool checkAssign(TokenType tokenType){
-	if(tokenType != ASSIGN) return false;
-	return true;	
 }
 
 AstNode* checkAssign(TOKEN token){

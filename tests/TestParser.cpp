@@ -63,6 +63,14 @@ bool checkParser6(){
     return parseProgram(tokenStream, AST);
 }
 
+bool checkParser7(){
+    std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parser/sourceTest7"));
+    TokenStream* tokenStream = new TokenStream(tokens);
+    AbstractSyntaxTree* AST = new AbstractSyntaxTree();
+    
+    return parseProgram(tokenStream, AST);
+}
+
 void test_parser(){
     VERIFY("sourceTest1 float dcl", checkParser1());
     VERIFY("sourceTest2 int and float dcl", checkParser2());
@@ -70,6 +78,7 @@ void test_parser(){
     VERIFY("sourceTest4 print id and num", checkParser4());
     VERIFY("sourceTest5 assign sum and print", checkParser5());
     VERIFY("sourceTest6 sum and assign ids", checkParser6());
+    VERIFY("sourceTest7 declare and sum ids", checkParser7());
 }
 
 // register suite

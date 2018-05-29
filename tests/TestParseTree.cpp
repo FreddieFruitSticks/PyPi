@@ -22,6 +22,7 @@ bool testForDclNode(){
     programToken.type = NIL;
     programToken.value = "PROGRAM";
 
+    // deprecated way of testing!
     if(tree.parentNode.token == programToken) {
         if(tree.parentNode.childNodes.back()->token == eofToken) {
             tree.parentNode.childNodes.pop_back();
@@ -55,6 +56,7 @@ bool testForPrintNodes(){
     programToken.type = NIL;
     programToken.value = "PROGRAM";
 
+    // deprecated way of testing!
     if(tree.parentNode.token == programToken) {
         if(tree.parentNode.childNodes.back()->token == eofToken) {
             tree.parentNode.childNodes.pop_back();
@@ -94,6 +96,7 @@ bool testForOperatorNode(){
     programToken.type = NIL;
     programToken.value = "PROGRAM";
 
+    // deprecated way of testing!
     if(tree.parentNode.token == programToken) {
         if(tree.parentNode.childNodes.back()->token == eofToken) {
             tree.parentNode.childNodes.pop_back();
@@ -139,6 +142,7 @@ bool testForMultipleOperatorNode(){
     programToken.type = NIL;
     programToken.value = "PROGRAM";
 
+    // deprecated way of testing!
     if(tree.parentNode.token == programToken) {
         if(tree.parentNode.childNodes.back()->token == eofToken) {
             tree.parentNode.childNodes.pop_back();
@@ -336,6 +340,72 @@ bool testAssignThreeSumNodes(){
     return true;
 }
 
+bool testdeclareAndSumNodes(){
+    std::vector<TOKEN> tokens = scan(std::string("./tests/test_sources/parse_tree/sourceTest8"));
+    TokenStream* tokenStream = new TokenStream(tokens);
+
+    AbstractSyntaxTree tree = initialiseAST(tokenStream);
+    TOKEN programToken;
+    TOKEN eofToken;
+    TOKEN idToken;
+    TOKEN assignToken;
+    TOKEN numberToken1;
+    TOKEN numberToken2;
+    TOKEN numberToken3;
+    TOKEN plusToken;
+
+    programToken.type = NIL;
+    programToken.value = "PROGRAM";
+    eofToken.type = END_OF_FILE;
+    idToken.type = ID;
+    idToken.value = "numA";
+    assignToken.type = ASSIGN;
+    numberToken1.type = INT_NUM;
+    numberToken1.value = "1";
+    numberToken2.type = INT_NUM;
+    numberToken2.value = "2";
+    numberToken3.type = INT_NUM;
+    numberToken3.value = "3";
+    plusToken.type = PLUS;
+
+    AstNode programNode(programToken);
+    AstNode eofNode(eofToken);
+    eofNode.setTheParenNode(programNode);
+    AstNode assignNode(assignToken);
+    assignNode.setTheParenNode(programNode);
+    AstNode plusNode(plusToken);
+    plusNode.setTheParenNode(assignNode);    
+    AstNode plusNode2(plusToken);
+    plusNode2.setTheParenNode(plusNode);    
+    AstNode numberNode2(numberToken2);
+    numberNode2.setTheParenNode(plusNode);
+    AstNode numberNode1(numberToken1);
+    numberNode1.setTheParenNode(plusNode);
+    AstNode numberNode3(numberToken3);
+    numberNode3.setTheParenNode(plusNode);
+    AstNode idNode(idToken);
+    idNode.setTheParenNode(assignNode);
+
+    std::vector<AstNode>* stack = new std::vector<AstNode>();
+    std::vector<AstNode>* allNodes = new std::vector<AstNode>();
+    stack->push_back(tree.parentNode);
+    void (*processor)(AstNode, std::vector<AstNode>*) = &printNodes;
+    tree.processSyntaxTree(stack, processor, allNodes);
+
+    AstNode astNodeArray[9] = {programNode, assignNode, eofNode, idNode, plusNode, numberNode1, plusNode2, numberNode2, numberNode3};
+    int i = 0;
+    for(std::vector<AstNode>::iterator it = allNodes->begin(); it != allNodes->end(); it++){
+        if(it->token != astNodeArray[i].token || 
+            ((it->token).value != "PROGRAM" && it->theParentNode == NULL) ||
+            ((it->token).value != "PROGRAM" && (it->theParentNode)->token != (astNodeArray[i].theParentNode)->token)){
+            return false;
+        }
+        i++;
+    }
+
+    return true;
+}
+
 void test_parse_AST(){
     VERIFY("SourceTest1 - Tree has declaration Node-> id node", testForDclNode());
     VERIFY("SourceTest2 - print->id and print->num nodes", testForPrintNodes());
@@ -344,6 +414,7 @@ void test_parse_AST(){
     VERIFY("SourceTest5 - assign nodes", testAssignNode());
     VERIFY("SourceTest6 - assign single sum nodes", testAssignOfSumNode());
     VERIFY("SourceTest7 - assign 3 sum nodes", testAssignThreeSumNodes());
+    // VERIFY("SourceTest8 - test declare and sum nodes", testdeclareAndSumNodes());
 }
 
 // register suite

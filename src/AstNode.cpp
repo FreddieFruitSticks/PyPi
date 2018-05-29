@@ -21,3 +21,7 @@ void AstNode::setNextChild(AstNode* newNode){
 void AstNode::setTheParenNode(AstNode& aParentNode){
     theParentNode = &aParentNode;
 }
+
+void AstNode::accept(void (*processor)(AstNode node)){
+    (*processor)(*this);
+}

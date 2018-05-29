@@ -1,0 +1,3 @@
+float numA = 1
+float numB = 2
+numA + numB

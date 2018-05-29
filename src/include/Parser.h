@@ -7,13 +7,11 @@
 
 bool parseProgram(TokenStream*, AbstractSyntaxTree*);
 AbstractSyntaxTree initialiseAST(TokenStream*);
-// bool parseDeclaration(TokenStream*);
 AstNode* parseDeclaration(TokenStream*);
 AstNode* checkType(TOKEN);
 AstNode* checkId(TOKEN);
 bool checkId(TokenType tokenType);
 AstNode* parseAssignment(TokenStream*);
-bool checkAssign(TokenType);
 AstNode* checkAssign(TOKEN);
 AstNode* checkNumber(TOKEN);
 bool checkNumber(TokenType);
@@ -24,5 +22,5 @@ AstNode* checkPrint(TOKEN);
 AstNode* parseOperatorStatement(TokenStream*);
 bool checkOperator(TokenType);
 AstNode* checkOperator(TOKEN);
-bool parseOperatorExpression(TokenStream*);
+
 #endif /*_PARSER_H*/

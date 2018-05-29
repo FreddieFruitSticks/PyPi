@@ -12,7 +12,7 @@ class AbstractSyntaxTree{
     
         AstNode breadthFirstSearch(std::vector<AstNode>, TOKEN);
         void processSyntaxTree(std::vector<AstNode>*, void (*f)(AstNode, std::vector<AstNode>*), std::vector<AstNode>*);
-        
+        void processSyntaxTree(std::vector<AstNode>* stack, void (*processor)(AstNode node));
 };
 
 #endif

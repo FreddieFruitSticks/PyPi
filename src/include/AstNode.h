@@ -14,5 +14,6 @@ class AstNode{
     AstNode();
     void setNextChild(AstNode*);
     void setTheParenNode(AstNode&);
+    void accept(void (*processor)(AstNode));
 };
 #endif
