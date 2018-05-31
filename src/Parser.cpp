@@ -115,6 +115,7 @@ AstNode* parseDeclaration(TokenStream* tokenStream){
 	AstNode* idNode = checkId(tokenStream->peekNext());
 	if(idNode != NULL){
 		typeNode->setNextChild(idNode);
+		idNode->setTheParenNode(*typeNode);
 		tokenStream->moveToNext();
 	}else {
 		return NULL;
