@@ -47,6 +47,7 @@ void SemanticAnalyser::processor(AstNode node){
                         throw std::runtime_error("type mismatch");
                     }
                 }else if(checkOperator(node.childNodes.back()->token.type)){
+                    // TODO: Implement operator for RHS of Assign
                     ;
                 }else{
                     throw std::runtime_error("Cannot assign id to bad type");
