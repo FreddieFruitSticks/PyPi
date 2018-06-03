@@ -10,6 +10,7 @@ class SemanticAnalyser{
         static void processor(AstNode node);
         void buildSyntaxTable();
         void typeChecking(AbstractSyntaxTree*);
+        ~SemanticAnalyser();
 };
 
 #endif
