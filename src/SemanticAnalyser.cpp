@@ -59,7 +59,6 @@ void SemanticAnalyser::processor(AstNode node){
             
             if(it != SemanticAnalyser::symbolTable.end()){
                 // std::string declarationEntry[2] = std::get<1>(*it);
-                // std::cout << node.childNodes.back()->token.type << std::endl;
                 if(node.childNodes.back()->token.type == INT_NUM){
                     if(std::get<1>(*it)[1] != "variable" || std::get<1>(*it)[0] != "int"){
                         throw std::runtime_error("type mismatch");

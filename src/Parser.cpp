@@ -131,6 +131,7 @@ AstNode* parsePrintStatement(TokenStream* tokenStream){
 	if(idNode == NULL){
 		AstNode* numNode = checkNumber(tokenStream->peekNext());
 		if(numNode == NULL){
+			//TODO: parse print sum nodes 
 			return NULL;
 		}else{
 			printNode->setNextChild(numNode);
